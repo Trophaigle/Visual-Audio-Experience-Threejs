@@ -5,8 +5,8 @@ import { OrbitControls } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber'
 import React, { useRef, useState } from 'react'
 import AudioSphere from './AudioSphere';
-import Explosion from './Explosion';
 import { useControls } from 'leva';
+
 
 export default function Scene() {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -55,21 +55,6 @@ export default function Scene() {
     }
   };
 
-  const { threshold, cooldown } = useControls({
-  threshold: {
-    value: 54,
-    min: 5,
-    max: 90,
-    step: 1,
-  },
-  cooldown: {
-    value: 25,
-    min: 5,
-    max: 100,
-    step: 1,
-  },
-});
-
 const { bassMultiplier } = useControls({
   bassMultiplier: {
     value: 1,
@@ -108,25 +93,24 @@ const { gain, smoothing } = useControls({
       </button>
 
       <Canvas camera={{ position: [0, 0, 5] }}>
+        <axesHelper args={[5]} />
+
+        {/* <color attach="background" args={["#050505"]} />
+        <fog attach="fog" args={["#000000", 5, 20]} /> */}
+
         <ambientLight intensity={0.5} />
         <directionalLight intensity={1.5} position={[2, 2, 2]} />
 
         <AudioSphere
           analyser={analyser}
-          threshold={threshold}
-          cooldown={cooldown}
+          audio={audio}
           bassMultiplier={bassMultiplier}
           gain={gain}
           smoothing={smoothing}
-          onDrop={() => {
-            setExplode(true);
-            setTimeout(() => setExplode(false), 300);
-          }}
+   
         />
 
-        <Explosion active={explode} />
-
-        <OrbitControls enableDamping />
+        {/* <OrbitControls enableDamping /> */}
 
       </Canvas>
     </>
