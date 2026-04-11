@@ -51,9 +51,8 @@ export default function AudioSphere({
     );
 
     const bass = energyRef.current / 255;
-    const intensity = bass * bassMultiplier * 0.5;
-
-    const time = performance.now() * 0.001;
+    //const innerIntensity = bass * bassMultiplier * 0.5;
+    const innerIntensity = Math.pow(bass, 1.9) * bassMultiplier;
 
     // 🌊 sphere scale
     const targetScale = 1 + (avg / 500) * bassMultiplier * gain;
@@ -90,7 +89,7 @@ export default function AudioSphere({
 
 
         // 💥 radial push doux uniquement
-        const offset = 1 + intensity / 1.5;
+        const offset = 1 + innerIntensity / 1.8;
 
         pos.array[i3] = dir.x * offset * 2;
         pos.array[i3 + 1] = dir.y * offset * 2;
