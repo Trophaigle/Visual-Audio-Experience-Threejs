@@ -99,7 +99,7 @@ const SceneContent = forwardRef(function SceneContent({
 
      if (!travelActive) {
       updateCameraDrop(delta);
-      updateStarsWarp(delta);
+    
     }
     
   });
