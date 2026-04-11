@@ -235,6 +235,7 @@ export default function Scene() {
 
       {/* 🌌 3D */}
       <Canvas camera={{ position: [0, 0, 5] }}>
+        <color attach="background" args={["black"]} />
         <SceneContent
           ref={sceneRef}
           analyser={analyser}
