@@ -1,21 +1,95 @@
-//canvas 3D
 "use client";
 
-import { OrbitControls } from '@react-three/drei';
-import { Canvas, useFrame } from '@react-three/fiber'
-import React, { useRef, useState } from 'react'
-import AudioSphere from './AudioSphere';
-import { useControls } from 'leva';
+import { Canvas, useFrame } from "@react-three/fiber";
+import { CameraControls, Stars } from "@react-three/drei";
+import React, { useEffect, useRef, useState } from "react";
+import AudioSphere from "@/components/AudioSphere";
+import { useTimeline } from "@/hooks/useTimeline";
+import { useCameraDrop } from "@/effects/useCameraDrop";
+import { useControls } from "leva";
 
+function SceneContent({
+  analyser,
+  audio,
+  bassMultiplier,
+  gain,
+  smoothing,
+}: any) {
+  const controls = useRef<any>(null);
+
+  // 🎧 timeline
+  const { addEvent, update: updateTimeline } = useTimeline(audio);
+
+  // 🎬 camera effect
+  const { trigger, update: updateCamera } = useCameraDrop(controls);
+
+  const explosionRef = useRef<() => void>(() => {});
+
+  // 🎯 init timeline events
+  useEffect(() => {
+    addEvent(85, () => {
+      console.log("💥 DROP !");
+      trigger(); // camera effect
+      explosionRef.current(); // sphere effect
+    });
+
+    addEvent(138, () => {
+      console.log("💥 DROP !");
+      trigger(); // camera effect
+      explosionRef.current(); // sphere effect
+    });
+
+  }, []);
+
+  // 🔁 global update loop
+  useFrame((_, delta) => {
+    updateTimeline();
+    updateCamera(delta);
+  });
+
+  return (
+    <>
+      {/* 🎥 camera controls */}
+      <CameraControls ref={controls} makeDefault />
+    <Stars
+      radius={100}
+      depth={50}
+      count={3000}
+      factor={4}
+      saturation={0}
+      fade
+      speed={0.5}
+    />
+
+      {/* 💡 lights */}
+      <ambientLight intensity={0.5} />
+      <directionalLight intensity={1.5} position={[2, 2, 2]} />
+
+      {/* 🎯 debug */}
+      {/* <axesHelper args={[5]} /> */}
+
+      {/* 🌍 audio visual */}
+      <AudioSphere
+        analyser={analyser}
+        bassMultiplier={bassMultiplier}
+        gain={gain}
+        smoothing={smoothing}
+        onExplosionReady={(fn) => {
+        explosionRef.current = fn;
+        }}
+      />
+    </>
+  );
+}
 
 export default function Scene() {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [explode, setExplode] = useState(false);
 
   const audioContextRef = useRef<AudioContext | null>(null);
 
+  // 🎧 play / pause
   const handleToggle = async () => {
     if (!audio) {
       const audioEl = new Audio("/music/Love_Again_Instru.mp3");
@@ -55,32 +129,34 @@ export default function Scene() {
     }
   };
 
-const { bassMultiplier } = useControls({
-  bassMultiplier: {
-    value: 1,
-    min: 0.5,
-    max: 3,
-    step: 0.1,
-  },
-});
+  // 🎛️ Leva controls
+  const { bassMultiplier } = useControls({
+    bassMultiplier: {
+      value: 1,
+      min: 0.5,
+      max: 3,
+      step: 0.1,
+    },
+  });
 
-const { gain, smoothing } = useControls({
-  gain: {
-    value: 1,
-    min: 0,
-    max: 5,
-    step: 0.1,
-  },
-  smoothing: {
-    value: 0.1,
-    min: 0.01,
-    max: 0.3,
-    step: 0.01,
-  },
-});
+  const { gain, smoothing } = useControls({
+    gain: {
+      value: 1,
+      min: 0,
+      max: 5,
+      step: 0.1,
+    },
+    smoothing: {
+      value: 0.1,
+      min: 0.01,
+      max: 0.3,
+      step: 0.01,
+    },
+  });
 
   return (
     <>
+      {/* 🎮 UI */}
       <button
         onClick={handleToggle}
         className="fixed top-5 left-5 z-50 px-5 py-2 rounded-xl 
@@ -92,26 +168,15 @@ const { gain, smoothing } = useControls({
         {isPlaying ? "⏸ Pause" : "▶ Play"}
       </button>
 
+      {/* 🌌 3D */}
       <Canvas camera={{ position: [0, 0, 5] }}>
-        <axesHelper args={[5]} />
-
-        {/* <color attach="background" args={["#050505"]} />
-        <fog attach="fog" args={["#000000", 5, 20]} /> */}
-
-        <ambientLight intensity={0.5} />
-        <directionalLight intensity={1.5} position={[2, 2, 2]} />
-
-        <AudioSphere
+        <SceneContent
           analyser={analyser}
           audio={audio}
           bassMultiplier={bassMultiplier}
           gain={gain}
           smoothing={smoothing}
-   
         />
-
-        {/* <OrbitControls enableDamping /> */}
-
       </Canvas>
     </>
   );
