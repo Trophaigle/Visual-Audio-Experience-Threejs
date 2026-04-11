@@ -77,6 +77,13 @@ const SceneContent = forwardRef(function SceneContent({
       triggerCameraTravel();
     });
 
+     addEvent(220, () => {
+      console.log("Camera Travel !");
+      explosionRef.current?.(); // sphere effect
+      triggerCameraDrop();
+      triggerCameraTravel();
+    });
+
   }, [audio]);
 
   // 🔁 global update loop

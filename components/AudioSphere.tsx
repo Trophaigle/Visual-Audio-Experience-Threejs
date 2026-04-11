@@ -51,7 +51,7 @@ export default function AudioSphere({
     );
 
     const bass = energyRef.current / 255;
-    const intensity = bass * bassMultiplier * 0.2; // 🔥 plus subtil
+    const intensity = bass * bassMultiplier * 0.5;
 
     const time = performance.now() * 0.001;
 
@@ -71,7 +71,7 @@ export default function AudioSphere({
 
     // 🌀 rotation Y (gardée)
     if (pointsRef.current) {
-      pointsRef.current.rotation.y += energyRef.current / 9000;
+      pointsRef.current.rotation.y += energyRef.current / 8500;
     }
 
     // 💥 RADIAL VIBRATION (clean & subtle)
