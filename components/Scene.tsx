@@ -65,7 +65,7 @@ const SceneContent = forwardRef(function SceneContent({
       triggerCameraTravel();
     });
 
-    addEvent(193, () => {
+    addEvent(193.5, () => {
       console.log("💥 DROP !");
       triggerCameraDrop(); // camera effect
       explosionRef.current?.(); // sphere effect
@@ -73,6 +73,7 @@ const SceneContent = forwardRef(function SceneContent({
 
     addEvent(196, () => {
       console.log("Camera Travel !");
+      triggerCameraDrop();
       triggerCameraTravel();
     });
 
