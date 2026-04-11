@@ -10,6 +10,7 @@ import { useControls } from "leva";
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useCameraTravel } from "@/effects/useCameraTravel";
 
+
 const SceneContent = forwardRef(function SceneContent({
   analyser,
   audio,
@@ -52,6 +53,7 @@ const SceneContent = forwardRef(function SceneContent({
       console.log("💥 DROP !");
       triggerCameraDrop(); // camera effect
       explosionRef.current?.(); // sphere effect
+     
     });
 
     addEvent(139, () => {
@@ -97,7 +99,9 @@ const SceneContent = forwardRef(function SceneContent({
 
      if (!travelActive) {
       updateCameraDrop(delta);
+      updateStarsWarp(delta);
     }
+    
   });
 
   return (
@@ -201,7 +205,7 @@ export default function Scene() {
       step: 0.1,
     },
     smoothing: {
-      value: 0.1,
+      value: 0.23,
       min: 0.01,
       max: 0.3,
       step: 0.01,
