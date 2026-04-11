@@ -22,6 +22,7 @@ export default function AudioSphere({
   const meshRef = useRef<THREE.Mesh>(null);
   const pointsRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+  const bloomIntensity = useRef(0.8);
   const energyRef = useRef(0);
 
 
@@ -69,6 +70,12 @@ export default function AudioSphere({
     if (pointsRef.current) {
       pointsRef.current.rotation.y += energyRef.current / 9000;
     }
+
+    bloomIntensity.current = THREE.MathUtils.lerp(
+      bloomIntensity.current,
+      targetScale,
+      0.1
+    );
   });
 
   return (
@@ -83,7 +90,7 @@ export default function AudioSphere({
         />
       </mesh>
       <EffectComposer>
-        <Bloom intensity={0.8} luminanceThreshold={0} />
+        <Bloom intensity={bloomIntensity.current} luminanceThreshold={0} />
       </EffectComposer>
 
       <points ref={pointsRef}>

@@ -5,6 +5,8 @@ export function useTimeline(audio: HTMLAudioElement | null) {
     { time: number; triggered: boolean; action: () => void }[]
   >([]);
 
+  const lastTime = useRef(0);
+
   const addEvent = (time: number, action: () => void) => {
     events.current.push({
       time,
@@ -17,23 +19,32 @@ export function useTimeline(audio: HTMLAudioElement | null) {
     if (!audio) return;
 
     const t = audio.currentTime;
+    const last = lastTime.current;
 
+    // 🔥 IMPORTANT: only trigger when crossing forward
     events.current.forEach((event) => {
-      if (t >= event.time && !event.triggered) {
+      if (
+        last < event.time &&
+        t >= event.time &&
+        !event.triggered
+      ) {
         event.triggered = true;
         event.action();
       }
     });
 
-    // reset si replay
-    if (t < 0.5) {
+    lastTime.current = t;
+
+    // reset si restart audio
+    if (t < last) {
       events.current.forEach((e) => (e.triggered = false));
     }
   };
 
   const seek = (time: number) => {
+    lastTime.current = time;
+
     events.current.forEach((event) => {
-      // reset ou déclenche selon position
       event.triggered = time >= event.time;
     });
   };

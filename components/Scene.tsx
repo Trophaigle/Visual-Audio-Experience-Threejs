@@ -8,6 +8,7 @@ import { useTimeline } from "@/hooks/useTimeline";
 import { useCameraDrop } from "@/effects/useCameraDrop";
 import { useControls } from "leva";
 import React, { forwardRef, useImperativeHandle } from "react";
+import { useCameraTravel } from "@/effects/useCameraTravel";
 
 const SceneContent = forwardRef(function SceneContent({
   analyser,
@@ -15,63 +16,86 @@ const SceneContent = forwardRef(function SceneContent({
   bassMultiplier,
   gain,
   smoothing,
+  isPlaying,
 }: any, ref) {
   const controls = useRef<any>(null);
 
   // 🎧 timeline
   const { addEvent, update: updateTimeline, seek: seekTimeline } = useTimeline(audio);
 
-  const seek = (time: number) => {
-    if (!audio) return;
+  // 🎬 camera drop
+  const { trigger: triggerCameraDrop, update: updateCameraDrop } = useCameraDrop(controls);
 
-    audio.currentTime = time;
-    seekTimeline(time);
-  };
+  // 🎬 camera travel
+  const { trigger: triggerCameraTravel, update: updateCameraTravel } = useCameraTravel(controls);
 
+  //explosion ref
+  const explosionRef = useRef<() => void>(() => {});
+
+  // skip audio
   const skip = (delta: number) => {
-    seek(audio.currentTime + delta);
+    if(!audio) return;
+    
+    audio.currentTime += delta;
+    seekTimeline(audio.currentTime);
   };
+
   useImperativeHandle(ref, () => ({
       skip,
   }));
 
-  // 🎬 camera effect
-  const { trigger, update: updateCamera } = useCameraDrop(controls);
-
-  const explosionRef = useRef<() => void>(() => {});
-
-  // 🎯 init timeline events
+  // 🎯 TIMELINE EVENTS
   useEffect(() => {
+    if(!audio) return;
+
     addEvent(85, () => {
       console.log("💥 DROP !");
-      trigger(); // camera effect
-      explosionRef.current(); // sphere effect
+      triggerCameraDrop(); // camera effect
+      explosionRef.current?.(); // sphere effect
     });
 
     addEvent(139, () => {
       console.log("💥 DROP !");
-      trigger(); // camera effect
-      explosionRef.current(); // sphere effect
+      triggerCameraDrop(); // camera effect
+      explosionRef.current?.(); // sphere effect
+    });
+
+    addEvent(157, () => {
+      console.log("Camera Travel !");
+      triggerCameraTravel();
     });
 
     addEvent(193, () => {
       console.log("💥 DROP !");
-      trigger(); // camera effect
-      explosionRef.current(); // sphere effect
+      triggerCameraDrop(); // camera effect
+      explosionRef.current?.(); // sphere effect
     });
 
-  }, []);
+    addEvent(196, () => {
+      console.log("Camera Travel !");
+      triggerCameraTravel();
+    });
+
+  }, [audio]);
 
   // 🔁 global update loop
   useFrame((_, delta) => {
+    if (!isPlaying || !audio) return; 
+
     updateTimeline();
-    updateCamera(delta);
+
+        // 🎥 camera travel a PRIORITÉ
+    const travelActive = updateCameraTravel(delta);
+
+     if (!travelActive) {
+      updateCameraDrop(delta);
+    }
   });
 
   return (
     <>
-      {/* 🎥 camera controls */}
-      <CameraControls ref={controls} makeDefault />
+    {/* 🎥 camera controls */}
+    <CameraControls ref={controls} makeDefault />
     <Stars
       radius={100}
       depth={50}
@@ -210,6 +234,7 @@ export default function Scene() {
           bassMultiplier={bassMultiplier}
           gain={gain}
           smoothing={smoothing}
+          isPlaying={isPlaying}
         />
       </Canvas>
     </>
