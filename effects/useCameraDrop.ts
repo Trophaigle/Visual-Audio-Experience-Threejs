@@ -32,7 +32,7 @@ export function useCameraDrop(controls: any) {
     const ease = Math.sin(t * Math.PI);
 
     const zoom = Math.sin(t * Math.PI);
-    const z = 5 + zoom * 2;
+    const z = 6 + zoom * 2;
 
     c.setLookAt(s.startPos.x, s.startPos.y, z, 0, 0, 0, false);
 

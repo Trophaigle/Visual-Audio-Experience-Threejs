@@ -31,5 +31,12 @@ export function useTimeline(audio: HTMLAudioElement | null) {
     }
   };
 
-  return { addEvent, update };
+  const seek = (time: number) => {
+    events.current.forEach((event) => {
+      // reset ou déclenche selon position
+      event.triggered = time >= event.time;
+    });
+  };
+
+  return { addEvent, update, seek };
 }

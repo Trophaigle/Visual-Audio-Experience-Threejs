@@ -2,23 +2,38 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { CameraControls, Stars } from "@react-three/drei";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AudioSphere from "@/components/AudioSphere";
 import { useTimeline } from "@/hooks/useTimeline";
 import { useCameraDrop } from "@/effects/useCameraDrop";
 import { useControls } from "leva";
+import React, { forwardRef, useImperativeHandle } from "react";
 
-function SceneContent({
+const SceneContent = forwardRef(function SceneContent({
   analyser,
   audio,
   bassMultiplier,
   gain,
   smoothing,
-}: any) {
+}: any, ref) {
   const controls = useRef<any>(null);
 
   // 🎧 timeline
-  const { addEvent, update: updateTimeline } = useTimeline(audio);
+  const { addEvent, update: updateTimeline, seek: seekTimeline } = useTimeline(audio);
+
+  const seek = (time: number) => {
+    if (!audio) return;
+
+    audio.currentTime = time;
+    seekTimeline(time);
+  };
+
+  const skip = (delta: number) => {
+    seek(audio.currentTime + delta);
+  };
+  useImperativeHandle(ref, () => ({
+      skip,
+  }));
 
   // 🎬 camera effect
   const { trigger, update: updateCamera } = useCameraDrop(controls);
@@ -33,7 +48,13 @@ function SceneContent({
       explosionRef.current(); // sphere effect
     });
 
-    addEvent(138, () => {
+    addEvent(139, () => {
+      console.log("💥 DROP !");
+      trigger(); // camera effect
+      explosionRef.current(); // sphere effect
+    });
+
+    addEvent(193, () => {
       console.log("💥 DROP !");
       trigger(); // camera effect
       explosionRef.current(); // sphere effect
@@ -63,7 +84,7 @@ function SceneContent({
 
       {/* 💡 lights */}
       <ambientLight intensity={0.5} />
-      <directionalLight intensity={1.5} position={[2, 2, 2]} />
+      <directionalLight intensity={1.6} position={[2, 2, 2]} />
 
       {/* 🎯 debug */}
       {/* <axesHelper args={[5]} /> */}
@@ -75,12 +96,12 @@ function SceneContent({
         gain={gain}
         smoothing={smoothing}
         onExplosionReady={(fn) => {
-        explosionRef.current = fn;
+          explosionRef.current = fn;
         }}
       />
     </>
   );
-}
+});
 
 export default function Scene() {
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -88,6 +109,7 @@ export default function Scene() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const audioContextRef = useRef<AudioContext | null>(null);
+  const sceneRef = useRef<any>(null);
 
   // 🎧 play / pause
   const handleToggle = async () => {
@@ -168,9 +190,21 @@ export default function Scene() {
         {isPlaying ? "⏸ Pause" : "▶ Play"}
       </button>
 
+      <button
+        onClick={() => sceneRef.current?.skip(10)}
+        className="fixed top-20 left-5 z-50 px-5 py-2 rounded-xl 
+        bg-white/10 text-white backdrop-blur-md 
+        border border-white/20 shadow-lg
+        hover:bg-white/20 hover:scale-105 
+        active:scale-95 transition-all duration-200"
+      >
+        Skip to 10s
+      </button>
+
       {/* 🌌 3D */}
       <Canvas camera={{ position: [0, 0, 5] }}>
         <SceneContent
+          ref={sceneRef}
           analyser={analyser}
           audio={audio}
           bassMultiplier={bassMultiplier}
