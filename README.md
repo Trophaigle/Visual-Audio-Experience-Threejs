@@ -4,6 +4,10 @@ An interactive audio-reactive visualization built with **React**, **Three.js**, 
 
 The project transforms music into a real-time 3D experience where different visual systems react independently to frequency ranges, creating a coherent relationship between sound, motion, lighting, and camera effects.
 
+## Image
+
+
+
 ## Live Demo
 
 🌐 **Try it here:**
