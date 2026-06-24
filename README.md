@@ -11,7 +11,7 @@ The project transforms music into a real-time 3D experience where different visu
 ## Live Demo
 
 🌐 **Try it here:**
-[Music Reactive Sphere](https://visual-audio-experience-threejs.vercel.app/)
+[Music Reactive Sphere](https://visual-audio-experience-threejs.vercel.app/) 
 
 ---
 
