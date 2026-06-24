@@ -6,7 +6,7 @@ The project transforms music into a real-time 3D experience where different visu
 
 ## Image
 
-
+<img width="1077" height="847" alt="MusicSphere" src="https://github.com/user-attachments/assets/54920f01-4903-4783-9637-780b3c189649" />
 
 ## Live Demo
 
