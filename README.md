@@ -4,16 +4,17 @@ An interactive audio-reactive visualization built with **React**, **Three.js**, 
 
 The project transforms music into a real-time 3D experience where different visual systems react independently to frequency ranges, creating a coherent relationship between sound, motion, lighting, and camera effects.
 
-## Image
-
-<img width="1077" height="847" alt="MusicSphere" src="https://github.com/user-attachments/assets/54920f01-4903-4783-9637-780b3c189649" /> 
-
 ## Live Demo
 
 🌐 **Try it here:**
 [Music Reactive Sphere](https://visual-audio-experience-threejs.vercel.app/) 
 
 ---
+
+## Image
+
+<img width="1077" height="847" alt="MusicSphere" src="https://github.com/user-attachments/assets/54920f01-4903-4783-9637-780b3c189649" /> 
+
 
 ## Features
 
