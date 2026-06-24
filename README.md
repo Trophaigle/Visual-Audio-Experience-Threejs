@@ -1,41 +1,148 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Music Reactive Sphere
 
-## Getting Started
+An interactive audio-reactive visualization built with **React**, **Three.js**, and the **Web Audio API**.
 
-First, run the development server:
+The project transforms music into a real-time 3D experience where different visual systems react independently to frequency ranges, creating a coherent relationship between sound, motion, lighting, and camera effects.
+
+## Live Demo
+
+🌐 **Try it here:**
+[https://your-demo-link.com](https://visual-audio-experience-threejs.vercel.app/)
+
+---
+
+## Features
+
+### Audio Analysis
+
+* Real-time frequency analysis using the Web Audio API
+* Separate handling of bass and treble frequencies
+* Dynamic visual feedback based on music intensity
+* Synchronization between audio playback and visual systems
+
+### Dual Sphere System
+
+#### Inner Sphere
+
+The inner sphere primarily reacts to:
+
+* High frequencies
+* Musical rhythm
+* Intensity peaks
+
+Effects include:
+
+* Dynamic radius deformation
+* Gradient color transitions
+* Smooth procedural animations
+
+#### Outer Particle Sphere
+
+The outer sphere is composed of particles and primarily reacts to:
+
+* Low frequencies
+* Bass energy
+
+This creates a visual distinction similar to the relationship between a tweeter and a subwoofer, producing a more readable and coherent audio visualization.
+
+### Timeline Events
+
+Specific musical moments trigger predefined events:
+
+* Drop effects
+* Radius boosts
+* Visual transitions
+* Camera movements
+
+These events are synchronized through a timeline system to enhance important sections of the music.
+
+### User Interaction
+
+Users can freely explore the scene:
+
+* Orbit around the visualization
+* Zoom in and out
+* Pause music
+* Resume playback
+* Seek through the track
+* Skip forward and backward
+
+All visual systems remain synchronized with the current playback position.
+
+### Visual Effects
+
+* Bloom post-processing
+* Dynamic lighting
+* Real-time shaders
+* Particle rendering
+* Smooth camera transitions
+
+---
+
+## Technologies
+
+* React
+* TypeScript
+* Three.js
+* React Three Fiber
+* Web Audio API
+* Postprocessing
+
+---
+
+## Project Goals
+
+This project was created to explore:
+
+* Real-time audio analysis
+* Procedural animation
+* Interactive 3D graphics
+* Music-driven visual systems
+* Synchronization between audio and rendering pipelines
+* Modern web graphics development
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Trophaigle/Visual-Audio-Experience-Threejs.git
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Build for production:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Future Improvements
 
-To learn more about Next.js, take a look at the following resources:
+* Additional visualization modes
+* Advanced beat detection
+* User-uploaded audio files
+* Mobile optimization
+* More post-processing effects
+* Custom visual themes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+MIT License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# Visual-Audio-Experience-Threejs
-- Developed a real-time 3D web experience with audio-reactive visuals - Integrated Web Audio API for dynamic interaction between sound and visuals - Focus on immersive user interaction and creative coding
->>>>>>> 8c2ce4edf79754c8f6b568ef216e5533b354eca8
